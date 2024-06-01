@@ -1,0 +1,109 @@
+https://github.com/search?q=repo%3AEpicguru%2FMelee-Animation%20assign&type=code
+ 
+> Patches/AddColumnWorker.xml
+
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <!-- Adds the AM_ExecutionModePawnColumn to all pawns -->
+  <Operation Class="PatchOperationInsert">
+    <xpath>Defs/PawnTableDef[defName="Assign"]/columns/li[text()="HostilityResponse"]</xpath>
+    <order>Append</order>
+    <value>
+      <li>AM_LassoModePawnColumn</li>
+      <li>AM_ExecutionModePawnColumn</li>
+    </value>
+  </Operation>
+</Patch>
+
+> Defs/ColumnWorkerDefs.xml
+
+<Defs>
+
+  <PawnColumnDef>
+    <defName>AM_ExecutionModePawnColumn</defName>
+    <headerTip>Auto-Execution mode</headerTip>
+    <workerClass>AM.ColumnWorkers.PawnColumnWorker_Execute</workerClass>
+    <sortable>true</sortable>
+  </PawnColumnDef>
+
+  <PawnColumnDef>
+    <defName>AM_LassoModePawnColumn</defName>
+    <headerTip>Auto-Lasso mode</headerTip>
+    <workerClass>AM.ColumnWorkers.PawnColumnWorker_Lasso</workerClass>
+    <sortable>true</sortable>
+  </PawnColumnDef>
+
+</Defs>
+
+> Source/1.5/AnimationMod/ColumnWorkers/PawnColumnWorker_Lasso.cs
+
+﻿using System;
+using AM.PawnData;
+using UnityEngine;
+using Verse;
+
+namespace AM.ColumnWorkers;
+
+public class PawnColumnWorker_Lasso : PawnColumnWorker_Base
+{
+    protected override Texture2D Icon => Content.IconGrapple;
+
+    protected override string MakeTooltip(PawnMeleeData data)
+    {
+        var tip = data.AutoGrapple switch
+        {
+            AutoOption.Default => $"Auto-Lasso is set to default, which means {(Core.Settings.AutoGrapple ? "Enabled" : "Disabled")} due to mod settings",
+            AutoOption.Enabled => "Auto-Lasso is Enabled.",
+            AutoOption.Disabled => "Auto-Lasso is Disabled.",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        bool hasLasso = data.Pawn?.TryGetLasso() != null;
+        if (!hasLasso)
+        {
+            tip += $"\n{data.Pawn?.NameShortColored} does not have a lasso equipped.";
+        }
+
+        return tip;
+    }
+
+    protected override ref AutoOption GetOptionRef(PawnMeleeData data) => ref data.AutoGrapple;
+
+    protected override Color GetIconColor(Pawn pawn, PawnMeleeData data)
+    {
+        bool hasLasso = pawn.TryGetLasso() != null;
+
+        if (!hasLasso)
+            return Color.yellow;
+        return base.GetIconColor(pawn, data);
+    }
+}
+
+public abstract class PawnColumnWorker_Base : PawnColumnWorker
+{
+    private const int TOP_PADDING = 3;
+    private const int WIDTH = 24;
+
+    protected abstract string MakeTooltip(PawnMeleeData data);
+
+    protected abstract Texture2D Icon { get; }
+
+    public override void DoCell(Rect rect, Pawn pawn, PawnTable table)
+    {
+        if (!pawn.RaceProps.Humanlike || !pawn.RaceProps.ToolUser)
+            return;
+
+        var data = pawn.GetMeleeData();
+        var c = GetIconColor(pawn, data);
+
+        var uv = new Rect(0, 0, 1, 1);
+        GUI.color = c;
+        Widgets.DrawTexturePart(rect, uv, Icon);
+        GUI.color = Color.white;
+        if (Widgets.ButtonInvisible(rect))
+        {
+            GetOptionRef(data) = (AutoOption)(((int)GetOptionRef(data) + 1) % 3);
+        }
+        TooltipHandler.TipRegion(rect, MakeTooltip(data));
+    }
