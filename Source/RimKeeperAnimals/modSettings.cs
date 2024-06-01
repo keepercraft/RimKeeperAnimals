@@ -22,16 +22,16 @@ namespace Keepercraft.RimKeeperAnimals
             listingStandard.CheckboxLabeled("Debug Log", ref RimKeeperAnimalsModSettings.DebugLog, "Log Messages");
             listingStandard.Gap();
 
-            listingStandard.CheckboxLabeled("Active wild animal reproduction", ref RimKeeperAnimalsModSettings.ActiveMateWild, "");
+            listingStandard.CheckboxLabeled("Active wild animal procreation", ref RimKeeperAnimalsModSettings.ActiveMateWild, "Wild animals that do not belong to your faction will breed with other animals.");
             listingStandard.Gap();
 
-            listingStandard.CheckboxLabeled("Active animal egg incubation logic", ref RimKeeperAnimalsModSettings.ActiveEggIncubation, "");
+            listingStandard.CheckboxLabeled("Active egg incubation", ref RimKeeperAnimalsModSettings.ActiveEggIncubation, "The logic of animals incubating eggs to protect them from external factors, that slow they deterioration rate.");
             listingStandard.Gap();
 
-            listingStandard.CheckboxLabeled("Active animal to try protect egg", ref RimKeeperAnimalsModSettings.ActiveEggIncubationProtect, "");
+            listingStandard.CheckboxLabeled("Active egg incumation protection", ref RimKeeperAnimalsModSettings.ActiveEggIncubationProtect, "An animals with wildness, will attack any other race/faction that comes too close while incubating their eggs.");
             listingStandard.Gap();
 
-            listingStandard.CheckboxLabeled("Active animal egg logic", ref RimKeeperAnimalsModSettings.ActiveEggLayLogic, "");
+            listingStandard.CheckboxLabeled("Active egg lay logic", ref RimKeeperAnimalsModSettings.ActiveEggLayLogic, "Expansion logic for egg laying. Animals will try to lay egg in place to reduce deterioration rate by environment.");
             listingStandard.Gap();
 
             listingStandard.End();
