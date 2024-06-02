@@ -51,7 +51,7 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
             return null;
         }
 
-        public static Pawn FindUndesirablePawn(this Pawn pawn, int searchRadius = 3)
+        public static Pawn FindUndesirablePawn(this Pawn pawn, float searchRadius = 3f)
         {
             return GenRadial.RadialCellsAround(pawn.Position, searchRadius, true)
                 .Where(w => w.Walkable(pawn.Map))

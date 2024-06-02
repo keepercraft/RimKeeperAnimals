@@ -2,6 +2,7 @@
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 
 namespace Keepercraft.RimKeeperAnimals.Extensions
@@ -46,6 +47,22 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
 
             if (egg.Map.mapPawns.AllPawns.Any(c => c.RaceProps.Animal && c.jobs.AllJobs().Any(a => a.targetA.Thing == egg))) return null;
             return egg;
+        }
+
+        public static float CalculateDistanceBetweenPawns(this Pawn pawn1, Pawn pawn2)
+        {
+            if (pawn1 != null && pawn2 != null && pawn1.Map == pawn2.Map)
+            {
+                IntVec3 pos1 = pawn1.Position;
+                IntVec3 pos2 = pawn2.Position;
+                float distance = (float)Mathf.Sqrt(Mathf.Pow(pos2.x - pos1.x, 2) + Mathf.Pow(pos2.z - pos1.z, 2));
+
+                return distance;
+            }
+            else
+            {
+                return -1f;
+            }
         }
     }
 }
