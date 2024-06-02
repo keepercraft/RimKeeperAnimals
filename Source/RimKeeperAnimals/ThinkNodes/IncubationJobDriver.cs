@@ -88,33 +88,36 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                                 //IntVec3 directionToTarget = pawnOther.Position - pawn.Position;
                                 //pawn.Rotation = Rot4.FromAngleFlat(directionToTarget.ToVector3().AngleFlat());
                                 
-                                if(!pawnOther.Drafted)
+                                if (!pawnOther.InMentalState &&
+                                    !(pawn.CurJob != null && pawnOther.CurJob.def == JobDefOf.Hunt))
                                 {
-                                    IntVec3 intVec = CellFinderLoose.GetFleeDest(pawnOther, new List<Thing>() { pawn });
-                                    if (intVec != pawnOther.Position)
+                                    if (!pawnOther.Drafted)
                                     {
-                                        Job job2 = JobMaker.MakeJob(JobDefOf.Flee, intVec, pawn);
-                                        pawnOther.jobs.TryTakeOrderedJob(job2);
+                                        IntVec3 intVec = CellFinderLoose.GetFleeDest(pawnOther, new List<Thing>() { pawn });
+                                        if (intVec != pawnOther.Position)
+                                        {
+                                            Job job2 = JobMaker.MakeJob(JobDefOf.Flee, intVec, pawn);
+                                            pawnOther.jobs.TryTakeOrderedJob(job2);
+                                        }
                                     }
+
+                                    Task.Run(() =>
+                                    {
+                                        Thread.Sleep(IncubationAggroDelay);
+                                        if (pawn.CalculateDistanceBetweenPawns(pawnOther) <= IncubationAggroActive)
+                                        {
+                                            DebugHelper.Message("IncubationJobDriver {0} start attack {1}", pawn.ToString(), pawnOther.ToString());
+                                            Job job = JobMaker.MakeJob(JobDefOf.AttackMelee, pawnOther);
+                                            //job.startTick = Find.TickManager.TicksGame + 1000;
+                                            job.maxNumMeleeAttacks = Rand.Range(2, 6);
+                                            job.expiryInterval = Rand.Range(600, 1000);
+                                            job.followRadius = IncubationAggroActive;
+                                            pawn.jobs.TryTakeOrderedJob(job);
+                                            EndJobWith(JobCondition.Succeeded);
+                                            MoteMaker.MakeColonistActionOverlay(pawn, ThingDefOf.Mote_ColonistAttacking);
+                                        }
+                                    });
                                 }
-
-                                Task.Run(() =>
-                                {
-                                    Thread.Sleep(IncubationAggroDelay);
-                                    if(pawn.CalculateDistanceBetweenPawns(pawnOther) <= IncubationAggroActive)
-                                    {
-                                        DebugHelper.Message("IncubationJobDriver {0} start attack {1}", pawn.ToString(), pawnOther.ToString());
-                                        Job job = JobMaker.MakeJob(JobDefOf.AttackMelee, pawnOther);
-                                        //job.startTick = Find.TickManager.TicksGame + 1000;
-                                        job.maxNumMeleeAttacks = Rand.Range(2, 6);
-                                        job.expiryInterval = Rand.Range(600, 1000);
-                                        job.followRadius = IncubationAggroActive;
-                                        pawn.jobs.TryTakeOrderedJob(job);
-                                        EndJobWith(JobCondition.Succeeded);
-                                        MoteMaker.MakeColonistActionOverlay(pawn, ThingDefOf.Mote_ColonistAttacking);
-                                    }
-                                });
-
                             }
                         }
                     }
