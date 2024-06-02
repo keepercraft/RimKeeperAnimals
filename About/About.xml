@@ -7,8 +7,35 @@
 		<li>1.5</li>
 	</supportedVersions>
 	<author>Keepercraft</author>
+	<modDependencies>
+		<li>
+			<packageId>brrainz.harmony</packageId>
+			<displayName>Harmony</displayName>
+			<steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+		</li>
+	</modDependencies>
+	<incompatibleWith>
+		<li>dninemfive.wildreproduction</li>
+	</incompatibleWith>
 	<loadAfter>
 		<li>brrainz.harmony</li>
 	</loadAfter>
-	<description>RimKeeperAnimals</description>
+	<description>
+	
+This mod just make Rimworld fauna more immersive by expand animal procreation and reproduction.
+Mod add several features like:
+- wild animals that do not belong to your faction will breed with other animals
+- animals that lay eggs will be try to incubate and protect them from enviromate by slow they deterioration rate
+- animals with wildness, will attack any other race/faction that comes too close while incubating their eggs
+- animals will try to lay egg in place to reduce deterioration rate by environment
+
+Each of the listed functionalities can be turned on or off in the mod's options.
+
+Mod is similar to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2236146674]Wild Reproduction[/url] and [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1224175982]Wild Animal Sex[/url]
+Adding more mechanics to birds and other laying egg animal.
+
+Source Code: [url=https://github.com/keepercraft/RimKeeperAnimals?tab=readme-ov-file]Github[/url]
+[url=https://ko-fi.com/keepercraft][img]https://storage.ko-fi.com/cdn/kofi5.png?v=3[/img][/url]
+	</description>
 </ModMetaData>
