@@ -1,7 +1,10 @@
-﻿using Keepercraft.RimKeeperAnimals.Models;
+﻿using Keepercraft.RimKeeperAnimals.Helpers;
+using Keepercraft.RimKeeperAnimals.Models;
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 
@@ -38,14 +41,17 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
             if (compProperties == null) return null;
             Thing egg = pawn.Map.listerThings
                 .ThingsOfDef(compProperties.eggFertilizedDef)
+                .Where(w => !w.Position.GetThingList(w.Map).Any(c => c is IStorageGroupMember))
+                .Where(w => !w.Position.GetThingList(w.Map).Any(c => c is Pawn))
+                .Where(w => !w.Map.mapPawns.AllPawns.Any(c => c.RaceProps.Animal && c.jobs.AllJobs().Any(a => a.targetA.Thing == w)))
                 //.ThingsInGroup(ThingRequestGroup.Egg)
                 .OrderBy(t => pawn.Position.DistanceTo(t.Position))
                 .FirstOrDefault();
-            //Log.Message(string.Format("Hatch egg {0} -> {1}", pawn.LabelCap, egg?.def.defName ?? ""));
-            if (egg == null) return null;
-            if (egg.Position.GetFirstPawn(egg.Map) != null) return null;
 
-            if (egg.Map.mapPawns.AllPawns.Any(c => c.RaceProps.Animal && c.jobs.AllJobs().Any(a => a.targetA.Thing == egg))) return null;
+            //if (egg == null) return null;
+            //DebugHelper.Message("Incubation egg {0} -> {1}", pawn.LabelCap, egg?.def.defName ?? "");
+            //if (egg.Position.GetFirstPawn(egg.Map) != null) return null;
+            //if (egg.Map.mapPawns.AllPawns.Any(c => c.RaceProps.Animal && c.jobs.AllJobs().Any(a => a.targetA.Thing == egg))) return null;
             return egg;
         }
 
@@ -62,6 +68,21 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
             else
             {
                 return -1f;
+            }
+        }
+
+        public static void PrintAllPropertiesOfThingDef<T>(T thingDef)
+        {
+            // Pobierz wszystkie właściwości ThingDef
+            PropertyInfo[] properties = typeof(T).GetProperties();
+
+            // Iteruj przez wszystkie właściwości i wypisz je na konsoli
+            foreach (PropertyInfo property in properties)
+            {
+                // Pobierz wartość właściwości dla thingDef
+                object value = property.GetValue(thingDef);
+
+                DebugHelper.Message("{0} => {1}", thingDef.ToString(), value.ToString());
             }
         }
     }

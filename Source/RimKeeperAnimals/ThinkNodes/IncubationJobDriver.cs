@@ -53,6 +53,13 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                         {
                             DebugHelper.Message("IncubationJobDriver {0} no egg", pawn.ToString());
                             EndJobWith(JobCondition.InterruptForced);
+                            return;
+                        }
+                        if (pawn.Position.GetThingList(pawn.Map).Any(c => c.def.IsShell))
+                        {
+                            DebugHelper.Message("IncubationJobDriver {0} Is on shell", pawn.ToString());
+                            EndJobWith(JobCondition.InterruptForced);
+                            return;
                         }
                         if (
                             pawn.needs.food.CurLevelPercentage < pawn.needs.food.PercentageThreshHungry ||
@@ -61,7 +68,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                         {
                             DebugHelper.Message("IncubationJobDriver {0} stop", pawn.ToString());
                             EndJobWith(JobCondition.InterruptForced);
-                            DebugHelper.Message("IncubationJobDriver {0} stop GO", pawn.ToString());
+                            return;
 
                         }
                         if (RimKeeperAnimalsModSettings.ActiveEggIncubationProtect 
@@ -136,14 +143,16 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                     {
                         DebugHelper.Message("IncubationJobDriver {0} layegg", pawn.ToString());
                         EndJobWith(JobCondition.Succeeded);
+                        return;
                     }
                     if (pawn.Position.GetThingList(pawn.Map).Any(a => (a is Pawn p) ? pawn != p : false))
                     {
                         DebugHelper.Message("IncubationJobDriver {0} space in use", pawn.Position);
                         EndJobWith(JobCondition.InterruptForced);
+                        return;
                     }
 
-                    DebugHelper.Message("IncubationJobDriver {0} end tick", pawn.ToString());
+                    //DebugHelper.Message("IncubationJobDriver {0} end tick", pawn.ToString());
                 }
             };
             yield return waitToil;
