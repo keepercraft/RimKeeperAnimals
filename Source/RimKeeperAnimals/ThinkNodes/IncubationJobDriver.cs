@@ -49,6 +49,11 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                     //DebugHelper.Message("IncubationJobDriver {0} tickAction", pawn.ToString());
                     if(job != null)
                     {
+                        if (!pawn.Position.GetThingList(pawn.Map).Any(c => c.def.IsEgg))
+                        {
+                            DebugHelper.Message("IncubationJobDriver {0} no egg", pawn.ToString());
+                            EndJobWith(JobCondition.InterruptForced);
+                        }
                         if (
                             pawn.needs.food.CurLevelPercentage < pawn.needs.food.PercentageThreshHungry ||
                             PawnUtility.EnemiesAreNearby(pawn, 10) ||
