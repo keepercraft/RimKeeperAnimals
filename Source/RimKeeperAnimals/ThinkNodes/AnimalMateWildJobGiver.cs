@@ -14,6 +14,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
             if (!RimKeeperAnimalsModSettings.ActiveMateWild) return null;
             if (!pawn.gender.HasFlag(Gender.Male)) return null;
             if (pawn.Sterile()) return null;
+            if (!RimKeeperAnimalsModSettings.MateActive()) return null;
 
             Predicate<Thing> validator = delegate (Thing t)
             {

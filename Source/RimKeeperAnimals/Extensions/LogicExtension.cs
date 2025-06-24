@@ -1,7 +1,6 @@
 ﻿using Keepercraft.RimKeeperAnimals.Helpers;
 using Keepercraft.RimKeeperAnimals.Models;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -84,6 +83,33 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
 
                 DebugHelper.Message("{0} => {1}", thingDef.ToString(), value.ToString());
             }
+        }
+
+        public static int CountAnimals(this Map map, bool includeTamed = true)
+        {
+            if (map.mapPawns == null) return -1;
+            return map.mapPawns.AllPawns
+                .Count(pawn =>
+                    pawn.RaceProps?.Animal == true &&
+                    (includeTamed || pawn.Faction == null || pawn.Faction != Faction.OfPlayer));
+        }
+
+        public static int CountAnimalsOnAllMaps(this List<Map> maps, bool includeWild = true, bool includeFactionPlayer = true, bool includeFactionOther = false)
+        {
+            if (maps == null || maps.Count == 0)
+                return 0;
+
+            return maps
+                .Where(w => w.mapPawns != null)
+                .SelectMany(map => map.mapPawns.AllPawns)
+                .Count(pawn =>
+                    pawn.RaceProps?.Animal == true &&
+                    (
+                        (includeWild && pawn.Faction == null) ||
+                        (includeFactionPlayer && pawn.Faction == Faction.OfPlayer) ||
+                        (includeFactionOther && pawn.Faction != null && pawn.Faction != Faction.OfPlayer)
+                    )
+                );
         }
     }
 }

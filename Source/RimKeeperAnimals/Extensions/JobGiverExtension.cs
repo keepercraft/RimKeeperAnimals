@@ -1,10 +1,5 @@
-﻿using Keepercraft.RimKeeperAnimals.Helpers;
-using RimWorld;
-using System;
-using System.Linq;
+﻿using System.Linq;
 using Verse;
-using Verse.AI;
-using Verse.Noise;
 
 namespace Keepercraft.RimKeeperAnimals.Extensions
 {
