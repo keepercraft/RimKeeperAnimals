@@ -14,9 +14,13 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 
         protected override Job TryGiveJob(Pawn pawn)
         {
+            if (pawn.health.Downed || pawn.health.Dead || pawn.Drafted) return null;
             if (!RimKeeperAnimalsModSettings.ActiveEggIncubation) return null;
             if (!pawn.gender.HasFlag(Gender.Female)) return null;
             if (!pawn.HasComp<CompEggLayer>()) return null;
+            if (pawn.health.summaryHealth.SummaryHealthPercent < 0.5) return null;
+            if (pawn.needs.food.CurLevelPercentage <= pawn.needs.food.PercentageThreshHungry) return null;
+            if (PawnUtility.EnemiesAreNearby(pawn, 10)) return null;
 
             //int tick = Find.TickManager.TicksGame;
             //if ((tick - lastTick) < TicksPerHour) return null;

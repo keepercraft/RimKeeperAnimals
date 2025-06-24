@@ -62,7 +62,8 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                             return;
                         }
                         if (
-                            pawn.needs.food.CurLevelPercentage < pawn.needs.food.PercentageThreshHungry ||
+                            pawn.health.summaryHealth.SummaryHealthPercent < 0.5 ||
+                            pawn.needs.food.CurLevelPercentage <= pawn.needs.food.PercentageThreshHungry ||
                             PawnUtility.EnemiesAreNearby(pawn, 10) ||
                             (job.targetA != null &&!job.targetA.Thing.def.IsEgg))
                         {
