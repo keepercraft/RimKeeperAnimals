@@ -73,7 +73,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 
                         }
                         if (RimKeeperAnimalsModSettings.ActiveEggIncubationProtect 
-                            && pawn.RaceProps.wildness > 0f
+                            && pawn.GetStatValue(StatDefOf.MinimumHandlingSkill) > 0f
                             && job.targetA != null
                             && pawn.Position == job.targetA.Cell)
                         {
