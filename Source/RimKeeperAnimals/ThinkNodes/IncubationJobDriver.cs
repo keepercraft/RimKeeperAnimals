@@ -61,17 +61,27 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                             EndJobWith(JobCondition.InterruptForced);
                             return;
                         }
-                        if (
-                            pawn.health.summaryHealth.SummaryHealthPercent < 0.5 ||
-                            pawn.needs.food.CurLevelPercentage <= pawn.needs.food.PercentageThreshHungry ||
-                            PawnUtility.EnemiesAreNearby(pawn, 10) ||
-                            (job.targetA != null &&!job.targetA.Thing.def.IsEgg))
-                        {
-                            DebugHelper.Message("IncubationJobDriver {0} stop", pawn.ToString());
-                            EndJobWith(JobCondition.InterruptForced);
-                            return;
 
+                        try
+                        {
+                            if (
+                                pawn.health.summaryHealth.SummaryHealthPercent < 0.5 ||
+                                pawn.needs.food.CurLevelPercentage <= pawn.needs.food.PercentageThreshHungry ||
+                                PawnUtility.EnemiesAreNearby(pawn, 10) ||
+                                (job.targetA != null && !job.targetA.Thing.def.IsEgg))
+                            {
+                                DebugHelper.Message("IncubationJobDriver EndJobWith {0}", pawn.ToString());
+                                EndJobWith(JobCondition.InterruptForced);
+                                return;
+                            }
                         }
+                        catch (System.Exception ex)
+                        {
+                            DebugHelper.Message("[ERROR CATCH] IncubationJobDriver {0} stop", ex.InnerException);
+                            return;
+                        }
+
+
                         if (RimKeeperAnimalsModSettings.ActiveEggIncubationProtect 
                             && pawn.GetStatValue(StatDefOf.MinimumHandlingSkill) > 0f
                             && job.targetA != null
@@ -82,18 +92,26 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                             {
                                 DebugHelper.Message("IncubationJobDriver {0} findOtherPawn {1}", pawn.ToString(), pawnOther.ToString());
 
-                                int num = pawn.ageTracker.CurLifeStageIndex;
-                                if (pawn.RaceProps.lifeStageAges[num]?.soundAngry != null)
+                                try
                                 {
-                                    LifeStageUtility.PlayNearestLifestageSound(pawn, (LifeStageAge lifeStage) => lifeStage.soundAngry, null, (MutantDef mutant) => mutant.soundAngry, 1f);
+                                    int num = pawn.ageTracker.CurLifeStageIndex;
+                                    if (pawn.RaceProps.lifeStageAges[num]?.soundAngry != null)
+                                    {
+                                        LifeStageUtility.PlayNearestLifestageSound(pawn, (LifeStageAge lifeStage) => lifeStage.soundAngry, null, (MutantDef mutant) => mutant.soundAngry, 1f);
+                                    }
+                                    else
+                                    {
+                                        DebugHelper.Message("Dont find soundAngry");
+                                        SoundInfo info = SoundInfo.InMap(new TargetInfo(pawn.PositionHeld, pawn.MapHeld, false), MaintenanceType.None);
+                                        info.pitchFactor = 1f;
+                                        info.volumeFactor = 1f;
+                                        pawn.RaceProps.soundMeleeHitPawn?.PlayOneShot(info);
+                                    }
                                 }
-                                else
+                                catch (System.Exception ex)
                                 {
-                                    DebugHelper.Message("Dont find soundAngry");
-                                    SoundInfo info = SoundInfo.InMap(new TargetInfo(pawn.PositionHeld, pawn.MapHeld, false), MaintenanceType.None);
-                                    info.pitchFactor = 1f;
-                                    info.volumeFactor = 1f;
-                                    pawn.RaceProps.soundMeleeHitPawn?.PlayOneShot(info);
+                                    DebugHelper.Message("[ERROR CATCH] IncubationJobDriver PlayNearestLifestageSound {0}", ex.InnerException);
+                                    return;
                                 }
 
                                 MoteMaker.MakeColonistActionOverlay(pawn, ThingDefOf.Mote_ColonistFleeing);

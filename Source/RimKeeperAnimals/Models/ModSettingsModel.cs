@@ -1,4 +1,5 @@
 ﻿using Keepercraft.RimKeeperAnimals.Extensions;
+using Keepercraft.RimKeeperAnimals.Helpers;
 using Verse;
 
 namespace Keepercraft.RimKeeperAnimals.Models
@@ -17,6 +18,7 @@ namespace Keepercraft.RimKeeperAnimals.Models
         public override void ExposeData()
         {
             base.ExposeData();
+            DebugHelper.Active = DebugLog;
             Scribe_Values.Look(ref DebugLog, nameof(DebugLog), false);
             Scribe_Values.Look(ref ActiveMateWild, nameof(ActiveMateWild), true);
             Scribe_Values.Look(ref ActiveEggIncubation, nameof(ActiveEggIncubation), true);

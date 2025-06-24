@@ -8,7 +8,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright © 2024 Keepercraft</Copyright>
     <Authors>Keepercraft</Authors>
-    <Version>1.0.8</Version>
+    <Version>1.1.1</Version>
     <Title>Keepercraft.RimKeeperAnimals</Title>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>

@@ -1,20 +1,17 @@
-﻿using Verse.AI;
-using Verse;
+﻿using Keepercraft.RimKeeperAnimals.Extensions;
 using Keepercraft.RimKeeperAnimals.Helpers;
-using Keepercraft.RimKeeperAnimals.Extensions;
 using Keepercraft.RimKeeperAnimals.Models;
 using RimWorld;
+using Verse;
+using Verse.AI;
 
 namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 {
     public class Incubation_JobGiver : ThinkNode_JobGiver
     {
-        private const int TicksPerHour = 50;
-        private int lastTick = 0;
-
         protected override Job TryGiveJob(Pawn pawn)
         {
-            if (pawn.health.Downed || pawn.health.Dead || pawn.Drafted) return null;
+            if (pawn.health.Downed || pawn.health.Dead || pawn.Drafted || pawn.jobs != null) return null;
             if (!RimKeeperAnimalsModSettings.ActiveEggIncubation) return null;
             if (!pawn.gender.HasFlag(Gender.Female)) return null;
             if (!pawn.HasComp<CompEggLayer>()) return null;
