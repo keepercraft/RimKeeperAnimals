@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <AssemblyName>Keepercraft.RimKeeperAnimals</AssemblyName>
 	<AssemblyTitle>RimKeeperAnimals</AssemblyTitle>
+	<Authors>Keepercraft</Authors>
+    <AssemblyName>$(Authors).$(AssemblyTitle)</AssemblyName>
 	<AssemblyVersion>$(Version)</AssemblyVersion>
 	<AssemblyProduct>$(AssemblyName)</AssemblyProduct>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright © 2024 Keepercraft</Copyright>
-    <Authors>Keepercraft</Authors>
     <Version>$(Configuration).1.2</Version>
 	<AssemblyVersion>$(Version)</AssemblyVersion>
 	<FileVersion>$(Version)</FileVersion>
@@ -33,9 +33,7 @@
 		<Delete Files="$(OutputPath)0Harmony.dll" ContinueOnError="true" />
 		
 		<ItemGroup>
-			<SFiles Include="
-					..\..\README.md;				  
-					..\..\LICENSE" />
+			<SFiles Include="..\..\README.md;..\..\LICENSE" />
 		</ItemGroup>
 		<Copy SourceFiles="@(SFiles)" DestinationFolder="$(ModCopyDir)\%(RecursiveDir)" />
 
@@ -81,6 +79,24 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.InputModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 

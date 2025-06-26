@@ -6,7 +6,7 @@ namespace Keepercraft.RimKeeperAnimals
 {
     public class RimKeeperAnimalsHelperMod : Mod
     {
-       // public string mapID = "";
+        // public string mapID = "";
         public int mapAnimalsCount = 0;
         public string ActiveMateThresholdText = "0";
         

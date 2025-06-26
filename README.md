@@ -20,4 +20,12 @@ Adding more mechanics to birds and other laying egg animal.
 
 Let me know if you find any incompatibility or have an idea for adding functionality.
 
+Requirements for compresion lib:
+[b]Windows 7[/b]:		.NET Framework 4.5 / Core 3.1	
+[b]Windows 10+[/b]:		.NET 5/6/7/8	
+[b]Ubuntu/Debian[/b]:	.NET 5+					[b]zlib1g, libicu[/b]
+[b]Arch Linux[/b]:		.NET 6+ /Mono 6.12+		[b]zlib, icu, mono[/b]
+[b]Steam Deck[/b]:		 Mono + Proton	
+
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G6XXIEZ)
