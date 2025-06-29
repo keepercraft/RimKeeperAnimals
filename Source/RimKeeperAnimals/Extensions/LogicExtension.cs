@@ -37,7 +37,10 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
             // if (!RestUtility.CanFallAsleep(pawn)) return null;
 
             CompProperties_EggLayer compProperties = pawn.kindDef.race.GetCompProperties<CompProperties_EggLayer>();
+           // DebugHelper.Message("Incubation_Egg try get {0} ", pawn.LabelCap);
             if (compProperties == null) return null;
+           // DebugHelper.Message("Incubation EGG {0} on {1}", pawn.LabelCap, compProperties.eggFertilizedDef.label);
+
             Thing egg = pawn.Map.listerThings
                 .ThingsOfDef(compProperties.eggFertilizedDef)
                 .Where(w => !w.Position.GetThingList(w.Map).Any(c => c is IStorageGroupMember))
