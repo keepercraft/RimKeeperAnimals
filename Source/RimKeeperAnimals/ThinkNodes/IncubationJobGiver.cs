@@ -32,8 +32,23 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
          //   DebugHelper.Message("Incubation_JobGiver {0} #7", pawn.LabelCap);
 
             if (PawnUtility.EnemiesAreNearby(pawn, 10)) return null;
-         //   DebugHelper.Message("Incubation_JobGiver {0} #8", pawn.LabelCap);
+            //   DebugHelper.Message("Incubation_JobGiver {0} #8", pawn.LabelCap);
 
+            if (pawn?.jobs != null &&
+                (pawn.jobs.curJob != null || pawn.jobs.jobQueue?.Count > 0 || pawn.jobs.curDriver != null))
+            {
+                return null;
+            }
+
+            CompProperties_EggLayer compProperties = pawn.def.GetCompProperties<CompProperties_EggLayer>();
+            if (compProperties != null)
+            {
+                var eggDef = compProperties.eggFertilizedDef;
+                if (pawn.Position.GetThingList(pawn.Map).Any(t => t.def == eggDef))
+                {
+                    return null;
+                }
+            }
 
             //int tick = Find.TickManager.TicksGame;
             //if ((tick - lastTick) < TicksPerHour) return null;
@@ -42,8 +57,11 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
             //if (!pawn.IsHashIntervalTick(TicksPerHour / 2)) return null;
             var egg = pawn.Incubation_Egg();
             if (egg == null) return null;
-            
-            DebugHelper.Message("Incubation {0} on {1}", pawn.LabelCap, egg.Position.ToString());
+
+
+           // DebugHelper.Message("JOB:{0} - DEF:{1}", pawn.jobs.curJob.GetType().FullName, pawn.CurJobDef.GetType().FullName);
+
+            DebugHelper.Message("Incubation JOB {0} on {1}", pawn.LabelCap, egg.Position.ToString());
             var jobdef = DefDatabase<JobDef>.GetNamed(nameof(IncubationJobDriver));
             var job = JobMaker.MakeJob(jobdef, egg);
             job.expireOnEnemiesNearby = true;

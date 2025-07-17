@@ -44,7 +44,7 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
             Thing egg = pawn.Map.listerThings
                 .ThingsOfDef(compProperties.eggFertilizedDef)
                 .Where(w => !w.Position.GetThingList(w.Map).Any(c => c is IStorageGroupMember))
-                .Where(w => !w.Position.GetThingList(w.Map).Any(c => c is Pawn))
+                .Where(w => !w.Position.GetThingList(w.Map).Any(c => c is Pawn && c != pawn))
                 .Where(w => !w.Map.mapPawns.AllPawns.Any(c => c.RaceProps.Animal && c.jobs.AllJobs().Any(a => a.targetA.Thing == w)))
                 //.ThingsInGroup(ThingRequestGroup.Egg)
                 .OrderBy(t => pawn.Position.DistanceTo(t.Position))

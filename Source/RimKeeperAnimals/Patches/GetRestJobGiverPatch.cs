@@ -19,10 +19,12 @@ namespace Keepercraft.RimKeeperAnimals.Patches
             if (!pawn.gender.HasFlag(Gender.Female)) return true;
             if (!pawn.HasComp<CompEggLayer>()) return true;
 
+            if (pawn?.jobs?.curDriver is IncubationJobDriver) return true;
+
             var egg = pawn.Incubation_Egg();
             if (egg == null) return true;
 
-            DebugHelper.Message("Incubation {0} on {1}", pawn.LabelCap, egg.Position.ToString());
+            DebugHelper.Message("Incubation TryGiveJob {0} on {1}", pawn.LabelCap, egg.Position.ToString());
             var jobdef = DefDatabase<JobDef>.GetNamed(nameof(IncubationJobDriver));
             var job = JobMaker.MakeJob(jobdef, egg);
             job.expireOnEnemiesNearby = true;
