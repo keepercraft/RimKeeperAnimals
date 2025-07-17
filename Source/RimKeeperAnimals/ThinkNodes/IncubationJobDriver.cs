@@ -22,7 +22,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 
         private const float IncubationAggroActive = 6f;
         private const int IncubationAggroDelay = 2000;
-
+            
         private IntVec3 lastPosition;
         private int ticksWithoutMoving = 0;
 
@@ -35,7 +35,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
         protected override IEnumerable<Toil> MakeNewToils()
         {
             //DebugHelper.Message("IncubationJobDriver {0} MakeNewToils", pawn.ToString());
-            Toil sleepToil = Toils_LayDown.LayDown(TargetIndex.A, false, this.LookForOtherJobs, true, true, PawnPosture.Standing, false);  
+            //Toil sleepToil = Toils_LayDown.LayDown(TargetIndex.A, false, this.LookForOtherJobs, true, true, PawnPosture.Standing, false);  
             Toil waitToil = new Toil();
             waitToil.defaultDuration = 2000;
             waitToil.defaultCompleteMode = ToilCompleteMode.Delay;
@@ -47,7 +47,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                 }
                 catch (System.Exception ex)
                 {
-                    DebugHelper.Message("[ERROR CATCH] IncubationJobDriver StartPath", ex.InnerException);
+                    DebugHelper.Message("[ERROR CATCH] IncubationJobDriver StartPath {0}", ex.InnerException);
                     return;
                 }
             };
@@ -112,8 +112,11 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                                 DebugHelper.Message("[ERROR CATCH] IncubationJobDriver {0} stop", ex.InnerException);
                                 return;
                             }
-
+#if RW15
+                            float wildness = pawn.GetStatValue(StatDefOf.MinimumHandlingSkill);    
+#elif RW16
                             float wildness = StatDefOf.Wildness.Worker.GetValue(pawn);
+#endif
                             if (RimKeeperAnimalsModSettings.ActiveEggIncubationProtect
                                 && wildness > 0f
                                 && job.targetA != null
@@ -184,11 +187,11 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                                 }
                             }
                         }
-                        if (pawn.needs.rest.CurLevelPercentage < 0.5f)
-                        {
-                            DebugHelper.Message("IncubationJobDriver {0} sleep", pawn.ToString());
-                            JumpToToil(sleepToil);
-                        }
+                        //if (pawn.needs.rest.CurLevelPercentage < 0.5f)
+                        //{
+                        //    DebugHelper.Message("IncubationJobDriver {0} sleep", pawn.ToString());
+                        //    JumpToToil(sleepToil);
+                        //}
                         CompEggLayer compEggLayer = pawn.TryGetComp<CompEggLayer>();
                         if (compEggLayer != null && compEggLayer.CanLayNow)
                         {
@@ -212,7 +215,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                 //DebugHelper.Message("IncubationJobDriver {0} end tick", pawn.ToString());
             };
             yield return waitToil;
-            yield return sleepToil;
+           // yield return sleepToil;
         }
     }
 }
