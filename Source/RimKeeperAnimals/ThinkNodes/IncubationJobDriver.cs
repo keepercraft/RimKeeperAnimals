@@ -12,9 +12,9 @@ using Verse.Sound;
 
 namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 {
-    public class IncubationJobDriver : JobDriver_LayDown
+    public class IncubationJobDriver_old : JobDriver_LayDown
     {
-        public string name_root = nameof(IncubationJobDriver);
+        public string name_root = nameof(IncubationJobDriver_old);
 
         private const int TicksPerHour = 2500;
         private const float TargetHungerLevel = 0.30f;

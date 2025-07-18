@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Verse;
 
@@ -129,6 +130,13 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
                 Log.Error("[RimKeeperAnimals] GetPrivateMethod:" + methodName);
                 return default;
             }
+        }
+
+        public static bool IsOneOf(this object obj, params Type[] types)
+        {
+            if (obj == null) return false;
+            var objType = obj.GetType();
+            return types.Any(t => t.IsAssignableFrom(objType));
         }
     }
 }
