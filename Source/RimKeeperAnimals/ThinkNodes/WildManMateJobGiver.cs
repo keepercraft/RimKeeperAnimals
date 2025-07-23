@@ -1,16 +1,18 @@
-﻿using RimWorld;
-using System;
-using Verse.AI;
-using Verse;
-using Keepercraft.RimKeeperAnimals.Helpers;
+﻿using Keepercraft.RimKeeperAnimals.Helpers;
 using Keepercraft.RimKeeperAnimals.Models;
+using RimWorld;
+using System;
+using Verse;
+using Verse.AI;
 
 namespace Keepercraft.RimKeeperAnimals.ThinkNodes
-{    public class AnimalMateWild_JobGiver : ThinkNode_JobGiver
+{
+    public class WildManMateJobGiver : ThinkNode_JobGiver
     {
         protected override Job TryGiveJob(Pawn pawn)
         {
-            if (!RimKeeperAnimalsModSettings.ActiveMateWild) return null;
+            if (!RimKeeperAnimalsModSettings.ActiveMateWildMan) return null;
+            if (!pawn.IsWildMan()) return null;
             if (!pawn.gender.HasFlag(Gender.Male)) return null;
             if (pawn.Sterile()) return null;
             if (!RimKeeperAnimalsModSettings.MateActive()) return null;
@@ -21,9 +23,10 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                 return !pawn3.Downed &&
                     pawn3.CanCasuallyInteractNow(false, false, false, false) &&
                     !pawn3.IsForbidden(pawn) &&
+                    pawn3.IsWildMan() &&
                     //pawn3.Faction == pawn.Faction &&
                     PawnUtility.FertileMateTarget(pawn, pawn3);
-                    //FertileMateTarget_X(pawn, pawn3);
+                //FertileMateTarget_X(pawn, pawn3);
             };
             Pawn pawn2 = (Pawn)GenClosest.ClosestThingReachable(
                 pawn.Position,
@@ -42,7 +45,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 
             if (pawn2 == null) return null;
 
-            DebugHelper.Message("AnimalMateWild_JobGiver: {0} -> {1}", pawn.LabelCap, pawn2.LabelCap);
+            DebugHelper.Message("WildManMateJobGiver: {0} -> {1}", pawn.LabelCap, pawn2.LabelCap);
             return JobMaker.MakeJob(JobDefOf.Mate, pawn2);
         }
 
@@ -52,5 +55,4 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
             //PawnUtility.FertileMateTarget(male, female);
         }
     }
-
 }

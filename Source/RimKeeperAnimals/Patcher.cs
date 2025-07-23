@@ -37,6 +37,18 @@ namespace Keepercraft.RimKeeperAnimals
                     v3.subNodes.Add(v2);
                     item.thinkRoot.subNodes.Add(v3);
                 });
+
+            DefDatabase<ThinkTreeDef>.AllDefs
+                .Where(w => w.defName == "HumanlikeConstant")
+                .Do(item =>
+                {
+                    var v2 = new ThinkNode_Tagger();
+                    v2.SetPrivateField("tagToGive", JobTag.SatisfyingNeeds);
+                    v2.subNodes.Add(new WildManMateJobGiver());
+                    var v3 = new ThinkNode_ChancePerHour_Mate();
+                    v3.subNodes.Add(v2);
+                    item.thinkRoot.subNodes.Add(v3);
+                });
         }
 
         public static void Add_JobGiver_Incubation()

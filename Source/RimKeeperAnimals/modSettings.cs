@@ -49,6 +49,9 @@ namespace Keepercraft.RimKeeperAnimals
             listingStandard.CheckboxLabeled("Active wild animal procreation", ref RimKeeperAnimalsModSettings.ActiveMateWild, "Wild animals that do not belong to your faction will breed with other animals.");
             listingStandard.Gap();
 
+            listingStandard.CheckboxLabeled("Active wild man procreation", ref RimKeeperAnimalsModSettings.ActiveMateWildMan, "Wild man that do not belong to your faction will breed with other wild man.");
+            listingStandard.Gap();
+
             listingStandard.CheckboxLabeled("Active egg incubation", ref RimKeeperAnimalsModSettings.ActiveEggIncubation, "The logic of animals incubating eggs to protect them from external factors, that slow they deterioration rate.");
             listingStandard.Gap();
 

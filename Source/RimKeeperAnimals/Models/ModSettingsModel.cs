@@ -8,6 +8,7 @@ namespace Keepercraft.RimKeeperAnimals.Models
     {
         public static bool DebugLog = false;
         public static bool ActiveMateWild = true;
+        public static bool ActiveMateWildMan = true;
         public static bool ActiveEggIncubation = true; 
         public static bool ActiveEggIncubationProtect = true;
         public static bool ActiveEggLayLogic = true;
@@ -21,6 +22,7 @@ namespace Keepercraft.RimKeeperAnimals.Models
             DebugHelper.Active = DebugLog;
             Scribe_Values.Look(ref DebugLog, nameof(DebugLog), false);
             Scribe_Values.Look(ref ActiveMateWild, nameof(ActiveMateWild), true);
+            Scribe_Values.Look(ref ActiveMateWildMan, nameof(ActiveMateWildMan), true);
             Scribe_Values.Look(ref ActiveEggIncubation, nameof(ActiveEggIncubation), true);
             Scribe_Values.Look(ref ActiveEggIncubationProtect, nameof(ActiveEggIncubationProtect), true);
             Scribe_Values.Look(ref ActiveEggLayLogic, nameof(ActiveEggLayLogic), true);
