@@ -3,6 +3,7 @@ using Keepercraft.RimKeeperAnimals.Extensions;
 using Keepercraft.RimKeeperAnimals.Helpers;
 using Keepercraft.RimKeeperAnimals.Models;
 using Keepercraft.RimKeeperAnimals.ThinkNodes;
+using RimWorld;
 using System.Linq;
 using System.Reflection;
 using Verse;
@@ -38,17 +39,38 @@ namespace Keepercraft.RimKeeperAnimals
                     item.thinkRoot.subNodes.Add(v3);
                 });
 
-            DefDatabase<ThinkTreeDef>.AllDefs
-                .Where(w => w.defName == "HumanlikeConstant")
-                .Do(item =>
-                {
-                    var v2 = new ThinkNode_Tagger();
-                    v2.SetPrivateField("tagToGive", JobTag.SatisfyingNeeds);
-                    v2.subNodes.Add(new WildManMateJobGiver());
-                    var v3 = new ThinkNode_ChancePerHour_Mate();
-                    v3.subNodes.Add(v2);
-                    item.thinkRoot.subNodes.Add(v3);
-                });
+            if (JobDefOf.BreastfeedCarryToMom != null && JobDefOf.Breastfeed != null)
+            {
+                //DefDatabase<JobDef>.Add(new WildManBabyCareJobDef());
+                DefDatabase<ThinkTreeDef>.AllDefs
+                    .Where(w => w.defName == "HumanlikeConstant")
+                    .Do(item =>
+                    {
+                        var v2 = new ThinkNode_Tagger();
+                        v2.SetPrivateField("tagToGive", JobTag.MiscWork);
+                        v2.subNodes.Add(new WildManBabyCareJobGiver());
+                        v2.subNodes.Add(new WildManBabyCarryToMomJobGiver());
+                        var v3 = new ThinkNode_ChancePerHour_Wait();
+                        v3.subNodes.Add(v2);
+                        item.thinkRoot.subNodes.Add(v3);
+                    });
+
+                DefDatabase<ThinkTreeDef>.AllDefs
+                    .Where(w => w.defName == "HumanlikeConstant")
+                    .Do(item =>
+                    {
+                        var v2 = new ThinkNode_Tagger();
+                        v2.SetPrivateField("tagToGive", JobTag.SatisfyingNeeds);
+                        v2.subNodes.Add(new WildManMateJobGiver());
+                        var v3 = new ThinkNode_ChancePerHour_Mate();
+                        v3.subNodes.Add(v2);
+                        item.thinkRoot.subNodes.Add(v3);
+                    });
+            }
+            else
+            {
+                DebugHelper.Message("WildMan procreation disable (no BiotechDLC detected)");
+            }
         }
 
         public static void Add_JobGiver_Incubation()
