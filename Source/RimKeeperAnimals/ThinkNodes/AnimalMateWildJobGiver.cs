@@ -6,7 +6,8 @@ using Keepercraft.RimKeeperAnimals.Helpers;
 using Keepercraft.RimKeeperAnimals.Models;
 
 namespace Keepercraft.RimKeeperAnimals.ThinkNodes
-{    public class AnimalMateWild_JobGiver : ThinkNode_JobGiver
+{    
+    public class AnimalMateWild_JobGiver : ThinkNode_JobGiver
     {
         protected override Job TryGiveJob(Pawn pawn)
         {

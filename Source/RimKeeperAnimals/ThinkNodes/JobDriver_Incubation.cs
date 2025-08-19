@@ -28,17 +28,25 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 
         public static bool IncubationValid(Pawn pawn, Job job = null)
         {
-            if (pawn.health.Downed || pawn.health.Dead || pawn.health.Downed) return true;
-            if (!pawn.gender.HasFlag(Gender.Female)) return true;
-            if (pawn.GetComp<CompEggLayer>()?.CanLayNow ?? false) return true;
-            if (pawn.health.hediffSet.GetInjuredParts().Any()) return true;
-            if (pawn.health.summaryHealth.SummaryHealthPercent < 0.8f) return true;
-            if (pawn.needs?.food?.CurLevelPercentage <= pawn.needs.food.PercentageThreshHungry) return true;
-            if (PawnUtility.EnemiesAreNearby(pawn, 10)) return true;
-            if(job != null)
+            try
             {
-                if ((job.targetA.Cell.GetFirstPawn(pawn.Map) ?? pawn) != pawn) return true;
-                if (job.targetA.Cell.GetThingList(pawn.Map)?.Any(t => t.def.IsShell) ?? false) return true;
+                if (pawn == null) return true;
+                if (pawn.health.Downed || pawn.health.Dead || pawn.health.Downed) return true;
+                if (!pawn.gender.HasFlag(Gender.Female)) return true;
+                if (pawn.GetComp<CompEggLayer>()?.CanLayNow ?? false) return true;
+                if (pawn.health.hediffSet.GetInjuredParts().Any()) return true;
+                if (pawn.health.summaryHealth.SummaryHealthPercent < 0.8f) return true;
+                if (pawn.needs?.food?.CurLevelPercentage <= pawn.needs.food.PercentageThreshHungry) return true;
+                if (PawnUtility.EnemiesAreNearby(pawn, 10)) return true;
+                if (job != null && pawn.Map != null)
+                {
+                    if ((job.targetA.Cell.GetFirstPawn(pawn.Map) ?? pawn) != pawn) return true;
+                    if (job.targetA.Cell.GetThingList(pawn.Map)?.Any(t => t.def.IsShell) ?? false) return true;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                DebugHelper.Message($"ERROR IncubationValid {ex.Message}");
             }
             return false;
         }
