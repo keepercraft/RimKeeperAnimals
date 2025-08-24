@@ -71,6 +71,9 @@ namespace Keepercraft.RimKeeperAnimals
             listingStandard.CheckboxLabeled("Inclode fication animals in mate threshold", ref RimKeeperAnimalsModSettings.ActiveMateThresholdFaction, "");
             listingStandard.Gap();
 
+            listingStandard.CheckboxLabeled("Active starvation hunger", ref RimKeeperAnimalsModSettings.ActiveAnimalEatAny, "A hungry animal will look for any source of food, even other animals. It's start looking for any food on 25% malnutrition and start hunting any pawn in range on 50% malnutrition");
+            listingStandard.Gap();
+
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
         }

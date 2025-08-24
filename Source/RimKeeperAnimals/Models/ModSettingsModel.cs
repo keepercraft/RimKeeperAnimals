@@ -15,6 +15,7 @@ namespace Keepercraft.RimKeeperAnimals.Models
         public static int ActiveMateThreshold = 100;
         public static bool ActiveMateThresholdWild = true;
         public static bool ActiveMateThresholdFaction = true;
+        public static bool ActiveAnimalEatAny = true;
 
         public override void ExposeData()
         {
@@ -29,6 +30,7 @@ namespace Keepercraft.RimKeeperAnimals.Models
             Scribe_Values.Look(ref ActiveMateThreshold, nameof(ActiveMateThreshold), 100);
             Scribe_Values.Look(ref ActiveMateThresholdWild, nameof(ActiveMateThresholdWild), true);
             Scribe_Values.Look(ref ActiveMateThresholdFaction, nameof(ActiveMateThresholdFaction), true);
+            Scribe_Values.Look(ref ActiveAnimalEatAny, nameof(ActiveAnimalEatAny), true);
         }
 
         public static bool MateActive() => ActiveMateThreshold > MateCount();
