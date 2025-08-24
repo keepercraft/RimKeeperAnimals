@@ -22,8 +22,9 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                 return !pawn3.Downed &&
                     pawn3.CanCasuallyInteractNow(false, false, false, false) &&
                     !pawn3.IsForbidden(pawn) &&
-                    //pawn3.Faction == pawn.Faction &&
-                    PawnUtility.FertileMateTarget(pawn, pawn3);
+                    pawn.CanReserve(pawn3, 1, -1, null, false) &&
+                        //pawn3.Faction == pawn.Faction &&
+                        PawnUtility.FertileMateTarget(pawn, pawn3);
                     //FertileMateTarget_X(pawn, pawn3);
             };
             Pawn pawn2 = (Pawn)GenClosest.ClosestThingReachable(

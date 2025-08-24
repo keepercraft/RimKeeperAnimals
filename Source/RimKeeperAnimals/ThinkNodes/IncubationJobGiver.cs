@@ -28,6 +28,7 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
             //}
             var egg = pawn.Incubation_Egg();
             if (egg == null) return null;
+            if (!pawn.CanReserve(egg, 1, -1, null, false)) return null;
             DebugHelper.Message("Incubation ThinkNode {0} on {1}", pawn.LabelCap, egg.Position.ToString());
             var jobdef = DefDatabase<JobDef>.GetNamed(nameof(IncubationJobDriver));
             var job = JobMaker.MakeJob(jobdef, egg);

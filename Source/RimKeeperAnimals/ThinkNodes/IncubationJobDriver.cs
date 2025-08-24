@@ -28,8 +28,10 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
+            if (job.targetA == null) return false;
+            if (!job.targetA.IsValid) return false;
             //DebugHelper.Message("IncubationJobDriver {0} TryMakePreToilReservations:{1}", pawn.ToString(), errorOnFailed);
-            return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
+            return pawn.Reserve(job.targetA, job, 1, -1, null, false);
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
