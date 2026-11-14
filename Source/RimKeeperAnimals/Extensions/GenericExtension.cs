@@ -119,7 +119,6 @@ namespace Keepercraft.RimKeeperAnimals.Extensions
         public static T GetPrivateMethod<T>(this object obj, string methodName, params object[] methodParams)
         {
             Type type = obj.GetType();
-
             MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
             if (methodInfo != null)
             {

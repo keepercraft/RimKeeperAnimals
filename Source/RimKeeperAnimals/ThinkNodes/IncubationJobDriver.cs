@@ -114,9 +114,9 @@ namespace Keepercraft.RimKeeperAnimals.ThinkNodes
                                 DebugHelper.Message("[ERROR CATCH] IncubationJobDriver {0} stop", ex.InnerException);
                                 return;
                             }
-#if RW15
+#if RIMWORLD_15
                             float wildness = pawn.GetStatValue(StatDefOf.MinimumHandlingSkill);    
-#elif RW16
+#else
                             float wildness = StatDefOf.Wildness.Worker.GetValue(pawn);
 #endif
                             if (RimKeeperAnimalsModSettings.ActiveEggIncubationProtect

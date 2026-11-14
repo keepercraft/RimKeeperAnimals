@@ -1,5 +1,4 @@
-﻿using Keepercraft.RimKeeperAnimals.Extensions;
-using Keepercraft.RimKeeperAnimals.Helpers;
+﻿using Keepercraft.RimKeeperAnimals.Helpers;
 using Keepercraft.RimKeeperAnimals.Models;
 using RimWorld;
 using System;
