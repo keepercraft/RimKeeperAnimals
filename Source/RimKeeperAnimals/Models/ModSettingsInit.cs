@@ -1,25 +1,23 @@
 ﻿using System;
 using Verse;
+namespace Keepercraft.RimKeeperAnimals.Models;
 
-namespace Keepercraft.RimKeeperAnimals.Models
+public abstract class ModSettingsInit : ModSettings
 {
-    public abstract class ModSettingsInit : ModSettings
+    private static bool initialized = false;
+
+    public static void DoWindowContents(Action onInit)
     {
-        private static bool initialized = false;
-
-        public static void DoWindowContents(Action onInit)
+        if (!initialized)
         {
-            if (!initialized)
-            {
-                initialized = true;
-                onInit();
-            }
+            initialized = true;
+            onInit();
         }
+    }
 
-        public override void ExposeData()
-        {
-            initialized = false;
-            base.ExposeData();
-        }
+    public override void ExposeData()
+    {
+        initialized = false;
+        base.ExposeData();
     }
 }

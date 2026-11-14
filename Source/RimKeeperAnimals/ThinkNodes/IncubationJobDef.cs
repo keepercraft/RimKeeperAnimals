@@ -1,15 +1,13 @@
 ﻿using Verse;
+namespace Keepercraft.RimKeeperAnimals.ThinkNodes;
 
-namespace Keepercraft.RimKeeperAnimals.ThinkNodes
+public class IncubationJobDef : JobDef
 {
-    public class IncubationJobDef : JobDef
+    public IncubationJobDef()
     {
-        public IncubationJobDef()
-        {
-            this.sleepCanInterrupt = false;
-            this.defName = nameof(IncubationJobDriver);
-            this.driverClass = typeof(IncubationJobDriver);
-            this.reportString = "Incubation";
-        }
+        this.sleepCanInterrupt = false;
+        this.defName = nameof(IncubationJobDriver);
+        this.driverClass = typeof(IncubationJobDriver);
+        this.reportString = "Incubation";
     }
 }
