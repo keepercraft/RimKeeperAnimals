@@ -13,6 +13,7 @@ public static class TryGiveJob_JobGiver_LayEgg_Patch
     static bool Prefix(JobGiver_LayEgg __instance, Pawn pawn, ref Job __result)
     {
         if (!RimKeeperAnimalsModSettings.ActiveEggLayLogic) return true;
+        if (!pawn.Awake()) return true;
         var compEggLayer = pawn.TryGetComp<CompEggLayer>();
         if (compEggLayer == null || !compEggLayer.CanLayNow) return false;
 
@@ -33,7 +34,7 @@ public static class TryGiveJob_JobGiver_LayEgg_Patch
         if (eggLayerProps == null) return true;
         var cell = pawn.FindCellRoofed(eggLayerProps.eggFertilizedDef);
         if (cell == null) return true;
-        DebugHelper.Message("LayEgg: {0}", cell.ToString());
+        DebugHelper.Message("AnimalEatAny_JobGiver: {0} {1} on {2}", pawn.ThingID, pawn.Position.ToString(), cell.ToString());
         __result = new Job(JobDefOf.LayEgg, (IntVec3)cell);
         return false;
     }

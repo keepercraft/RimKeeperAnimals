@@ -16,8 +16,7 @@ internal class Patcher
 {
     static Patcher()
     {
-        Add_JobGiver_Mate();
-        Add_JobGiver_Incubation();
+        Add_JobGiver();
         string namespaceName = MethodBase.GetCurrentMethod().DeclaringType.Namespace;
         DebugHelper.SetHeader(namespaceName.Split('.').LastOrDefault());
         DebugHelper.Active = RimKeeperAnimalsModSettings.DebugLog;
@@ -25,10 +24,10 @@ internal class Patcher
         new Harmony(namespaceName).PatchAll();
     }
 
-    public static void Add_JobGiver_Mate()
+    public static void Add_JobGiver()
     {
         DefDatabase<ThinkTreeDef>.AllDefs
-            .Where(w => w.defName == "AnimalConstant")
+            .Where(w => w.defName == "AnimalConstant") //AnimalConstant
             .Do(item =>
             {
                 var v2 = new ThinkNode_Tagger();
@@ -39,6 +38,7 @@ internal class Patcher
                 item.thinkRoot.subNodes.Add(v3);
             });
 
+        DefDatabase<JobDef>.Add(new IncubationJobDef());
         DefDatabase<ThinkTreeDef>.AllDefs
             .Where(w => w.defName == "AnimalConstant")
             .Do(item =>
@@ -46,57 +46,50 @@ internal class Patcher
                 var v2 = new ThinkNode_Tagger();
                 v2.SetPrivateField("tagToGive", JobTag.SatisfyingNeeds);
                 v2.subNodes.Add(new AnimalEatAny_JobGiver());
-                //var v3 = new ThinkNode_ChancePerHour_Eat();
-                //v3.SetPrivateField("mtbHours", 1f);
-                //v3.SetPrivateField("mtbDays", -1f);
-                //v3.subNodes.Add(v2);
+                v2.subNodes.Add(new Incubation_JobGiver());
+                var v3 = new ThinkNode_ChancePerHour_Wait(2f);
+                v3.subNodes.Add(v2);
                 item.thinkRoot.subNodes.Add(v2);
             });
 
-        if (JobDefOf.BreastfeedCarryToMom != null && JobDefOf.Breastfeed != null)
-        {
-            //DefDatabase<JobDef>.Add(new WildManBabyCareJobDef());
-            DefDatabase<ThinkTreeDef>.AllDefs
-                .Where(w => w.defName == "HumanlikeConstant")
-                .Do(item =>
-                {
-                    var v2 = new ThinkNode_Tagger();
-                    v2.SetPrivateField("tagToGive", JobTag.MiscWork);
-                    v2.subNodes.Add(new WildManBabyCareJobGiver());
-                    v2.subNodes.Add(new WildManBabyCarryToMomJobGiver());
-                    var v3 = new ThinkNode_ChancePerHour_Wait();
-                    v3.subNodes.Add(v2);
-                    item.thinkRoot.subNodes.Add(v3);
-                });
-
-            DefDatabase<ThinkTreeDef>.AllDefs
-                .Where(w => w.defName == "HumanlikeConstant")
-                .Do(item =>
-                {
-                    var v2 = new ThinkNode_Tagger();
-                    v2.SetPrivateField("tagToGive", JobTag.SatisfyingNeeds);
-                    v2.subNodes.Add(new WildManMateJobGiver());
-                    var v3 = new ThinkNode_ChancePerHour_Mate();
-                    v3.subNodes.Add(v2);
-                    item.thinkRoot.subNodes.Add(v3);
-                });
-        }
-        else
-        {
-            DebugHelper.Message("WildMan procreation disable (no BiotechDLC detected)");
-        }
-    }
-
-    public static void Add_JobGiver_Incubation()
-    {
-        DefDatabase<JobDef>.Add(new IncubationJobDef());
         DefDatabase<ThinkTreeDef>.AllDefs
-            .Where(w => w.defName == "AnimalConstant" || w.defName == "Animal")
+            .Where(w => w.defName is "HumanlikeConstant")//or "MainWildManBehaviorCore")
             .Do(item =>
             {
-                item.thinkRoot.subNodes.Add(new Incubation_JobGiver());
+                var v2 = new ThinkNode_Tagger();
+                v2.SetPrivateField("tagToGive", JobTag.MiscWork);
+                v2.subNodes.Add(new WildManBabyCareJobGiver());
+                v2.subNodes.Add(new WildManBabyCarryToMomJobGiver());
+                v2.subNodes.Add(new WildManMateJobGiver());
+                var v3 = new ThinkNode_ChancePerHour_Wait(2f);
+                v3.subNodes.Add(v2);
+                item.thinkRoot.subNodes.Add(v3);
             });
+
+        //DefDatabase<ThinkTreeDef>.AllDefs
+        //    .Where(w => w.defName is "HumanlikeConstant" or "MainWildManBehaviorCore")
+        //    .Do(item =>
+        //    {
+        //        var v2 = new ThinkNode_Tagger();
+        //        v2.SetPrivateField("tagToGive", JobTag.SatisfyingNeeds);
+        //        v2.subNodes.Add(new WildManMateJobGiver());
+        //        var v3 = new ThinkNode_ChancePerHour_Mate();
+        //        v3.subNodes.Add(v2);
+        //        item.thinkRoot.subNodes.Add(v3);
+        //    });
+
     }
+
+    //public static void Add_JobGiver_Incubation()
+    //{
+    //    DefDatabase<JobDef>.Add(new IncubationJobDef());
+    //    DefDatabase<ThinkTreeDef>.AllDefs
+    //        .Where(w => w.defName == "AnimalConstant" || w.defName == "Animal")
+    //        .Do(item =>
+    //        {
+    //            item.thinkRoot.subNodes.Add(new Incubation_JobGiver());
+    //        });
+    //}
 
     //[HarmonyPatch(typeof(JobGiver_EatRandom), "TryGiveJob")] //old test
     public static class Patch_JobGiver_EatRandom
@@ -162,17 +155,3 @@ internal class Patcher
         }
     }
 }
-
-public class ThinkNode_ChancePerHour_Eat : ThinkNode_ChancePerHour
-{
-    protected override float MtbHours(Pawn pawn)
-    {
-        DebugHelper.Message("ThinkNode_ChancePerHour_Eat : {0}", pawn.RaceProps.mateMtbHours);
-        return 0.0001f;
-    }
-}
-
-//public class JobDriver_IngestWithMultiplier : JobDriver_Ingest
-//{
-//    private const float NutritionMultiplier = 1.0f;
-//}

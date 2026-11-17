@@ -11,6 +11,7 @@ public class WildManMateJobGiver : ThinkNode_JobGiver
     protected override Job TryGiveJob(Pawn pawn)
     {
         if (!RimKeeperAnimalsModSettings.ActiveMateWildMan) return null;
+
         if (!pawn.IsWildMan()) return null;
         if (!pawn.gender.HasFlag(Gender.Male)) return null;
         if (pawn.Sterile()) return null;
@@ -44,6 +45,7 @@ public class WildManMateJobGiver : ThinkNode_JobGiver
 
         if (pawn2 == null) return null;
 
+        DebugHelper.Message("WildManMateJobGiver: {0} {1}", pawn2.ThingID, pawn2.Position.ToString());
         DebugHelper.Message("WildManMateJobGiver: {0} -> {1}", pawn.LabelCap, pawn2.LabelCap);
         return JobMaker.MakeJob(JobDefOf.Mate, pawn2);
     }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Verse;
+using Verse.AI;
 namespace Keepercraft.RimKeeperAnimals.Extensions;
 
 public static class JobGiverExtension
@@ -16,19 +17,6 @@ public static class JobGiverExtension
         return null;
     }
 
-    public static IntVec3? FindCellRoofed(this Pawn pawn, ThingDef thingDef, int searchRadius = 25, int stackThreshold = 10)
-    {
-        return GenRadial.RadialCellsAround(pawn.Position, searchRadius, true)
-            .Where(w => w.Walkable(pawn.Map))
-            .Where(w => pawn.Map.roofGrid.Roofed(w))
-            .Where(w => !w.GetTerrain(pawn.Map).IsWater)
-            .Where(w => w.GetFirstPawn(pawn.Map) == null)
-            .Where(w => w.GetThingList(pawn.Map).Sum(s => s.stackCount) < stackThreshold)
-            .OrderByDescending(c => c.GetThingList(pawn.Map).Any(t => t.def == thingDef))
-            .Select(s => (IntVec3?)s)
-            .FirstOrDefault();
-    }
-
     public static IntVec3? FindThingDef(this Pawn pawn, ThingDef thingDef, int searchRadius = 25)
     {
         foreach (IntVec3 cell in GenRadial.RadialCellsAround(pawn.Position, searchRadius, true))
@@ -43,16 +31,5 @@ public static class JobGiverExtension
             }
         }
         return null;
-    }
-
-    public static Pawn FindUndesirablePawn(this Pawn pawn, float searchRadius = 3f)
-    {
-        return GenRadial.RadialCellsAround(pawn.Position, searchRadius, true)
-            .Where(w => w.Walkable(pawn.Map))
-            .Select(w => w.GetFirstPawn(pawn.Map))
-            .Where(w => w != null && w != pawn)
-            .Where(w => w.Faction == null || w.Faction != pawn.Faction)
-            .Where(w => w.def != pawn.def)
-            .FirstOrDefault();
     }
 }

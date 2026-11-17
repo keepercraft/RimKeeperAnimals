@@ -9,5 +9,6 @@ public class IncubationJobDef : JobDef
         this.defName = nameof(IncubationJobDriver);
         this.driverClass = typeof(IncubationJobDriver);
         this.reportString = "Incubation";
+        this.label = "Incubation";
     }
 }
